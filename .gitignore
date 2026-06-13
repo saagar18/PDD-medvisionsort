@@ -60,3 +60,10 @@ local.properties
 captures/
 .externalNativeBuild/
 .cxx/
+
+# ── Allowed Test Reports for CI Verification ──────────────────────
+!E2E_Test_Report_MedVisionSort_2026-06-11T18-56-04.xlsx
+!Vulnerability Test Results/
+!Vulnerability Test Results/Security_Vulnerability_Report_v5_FINAL.xlsx
+
+
