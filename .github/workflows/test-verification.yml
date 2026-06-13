@@ -34,10 +34,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: E2E-Test-Report
-          path: E2E_Test_Report_MedVisionSort_2026-06-11T18-56-04.xlsx
+          path: E2E_Test_Report_MedVisionSort_Appium.xlsx
 
       - name: Upload Security Vulnerabilities Report
         uses: actions/upload-artifact@v4
         with:
           name: Security-Vulnerabilities-Report
-          path: Vulnerability Test Results/Security_Vulnerability_Report_v5_FINAL.xlsx
+          path: mobile_app/Security_Vulnerability_Report_v5_Mobileapp.xlsx

@@ -8,8 +8,8 @@ def get_report_paths():
     script_dir = os.path.dirname(os.path.abspath(__file__))
     repo_root = os.path.abspath(os.path.join(script_dir, ".."))
     
-    e2e_filename = "E2E_Test_Report_MedVisionSort_2026-06-11T18-56-04.xlsx"
-    sec_filename = os.path.join("Vulnerability Test Results", "Security_Vulnerability_Report_v5_FINAL.xlsx")
+    e2e_filename = "E2E_Test_Report_MedVisionSort_Appium.xlsx"
+    sec_filename = os.path.join("mobile_app", "Security_Vulnerability_Report_v5_Mobileapp.xlsx")
     
     paths = {
         "e2e": [
