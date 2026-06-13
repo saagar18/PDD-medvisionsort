@@ -1,0 +1,55 @@
+<div class="auth-page">
+  <div class="auth-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+  </div>
+
+  <div class="auth-container">
+    <mat-card class="auth-card glass-panel">
+      <div class="auth-header">
+        <div class="logo" routerLink="/">
+          <div class="logo-icon">
+            <mat-icon>visibility</mat-icon>
+          </div>
+          <span>MedVisionSort</span>
+        </div>
+        <h1>Welcome Back</h1>
+        <p>Login to your medical portal</p>
+      </div>
+
+      <div *ngIf="errorMessage" class="error-message">
+        <mat-icon>error</mat-icon>
+        <span>{{ errorMessage }}</span>
+      </div>
+
+      <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email Address</mat-label>
+          <input matInput type="email" name="email" [(ngModel)]="loginData.email" required placeholder="dr.saagar&#64;hospital.com">
+          <mat-icon matPrefix>email</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Password</mat-label>
+          <input matInput [type]="showPassword ? 'text' : 'password'" name="password" [(ngModel)]="loginData.password" required>
+          <mat-icon matPrefix>lock</mat-icon>
+          <button type="button" mat-icon-button matSuffix (click)="showPassword = !showPassword">
+            <mat-icon>{{showPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+        </mat-form-field>
+
+        <div class="auth-actions">
+          <a routerLink="/forgot-password" class="forgot-link">Forgot Password?</a>
+        </div>
+
+        <button mat-flat-button class="btn-primary full-width" type="submit" [disabled]="!loginForm.valid">
+          Sign In
+        </button>
+
+        <div class="auth-footer">
+          <p>Don't have an account? <a routerLink="/register">Register Now</a></p>
+        </div>
+      </form>
+    </mat-card>
+  </div>
+</div>

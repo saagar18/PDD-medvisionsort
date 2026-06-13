@@ -1,0 +1,32 @@
+<div class="stats-grid" *ngIf="stats.counts">
+  <mat-card class="stat-card glass-panel">
+    <mat-card-content>
+      <div class="stat-icon xray"><mat-icon>settings_overscan</mat-icon></div>
+      <div class="stat-info">
+        <span class="label">X-Ray Scans</span>
+        <span class="value">{{stats.counts.xray}}</span>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="stat-card glass-panel">
+    <mat-card-content>
+      <div class="stat-icon mri"><mat-icon>biotech</mat-icon></div>
+      <div class="stat-info">
+        <span class="label">MRI Scans</span>
+        <span class="value">{{stats.counts.mri}}</span>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="stat-card glass-panel">
+    <mat-card-content>
+      <div class="stat-icon ct"><mat-icon>document_scanner</mat-icon></div>
+      <div class="stat-info">
+        <span class="label">CT Scans</span>
+        <span class="value">{{stats.counts.ct}}</span>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+</div>

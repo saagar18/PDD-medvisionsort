@@ -1,0 +1,107 @@
+.image-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--transition-normal);
+  
+  &:hover {
+    transform: translateY(-5px);
+  }
+}
+
+.image-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4/3;
+  background: #000;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.9;
+  }
+
+  .type-badge {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(4px);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+}
+
+.mat-mdc-card-content {
+  padding: 1.25rem !important;
+  flex: 1;
+}
+
+.patient-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+
+  .name {
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .date {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+}
+
+.confidence {
+  label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .progress-bar {
+    height: 6px;
+    background: var(--bg-tertiary);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 0.25rem;
+
+    .progress {
+      height: 100%;
+      background: var(--primary);
+    }
+  }
+
+  .val {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--primary);
+  }
+}
+
+.mat-mdc-card-actions {
+  padding: 0.75rem 1.25rem !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--bg-tertiary);
+
+  .status {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    
+    &.sorted { color: var(--success); }
+    &.pending { color: var(--warning); }
+    &.flagged { color: var(--danger); }
+  }
+}

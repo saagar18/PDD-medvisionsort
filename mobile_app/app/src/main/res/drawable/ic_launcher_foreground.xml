@@ -1,0 +1,55 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    
+    <!-- Medical Cross Outline (Semi-transparent glowing backing) -->
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M46,30 h16 v16 h16 v16 h-16 v16 h-16 v-16 h-16 v-16 h16 z"
+        android:strokeWidth="6"
+        android:strokeColor="#22FFFFFF"
+        android:strokeLineJoin="round"
+        android:strokeLineCap="round" />
+
+    <!-- Medical Cross Outline (Core White Line) -->
+    <path
+        android:fillColor="#11FFFFFF"
+        android:pathData="M46,30 h16 v16 h16 v16 h-16 v16 h-16 v-16 h-16 v-16 h16 z"
+        android:strokeWidth="3.5"
+        android:strokeColor="#FFFFFF"
+        android:strokeLineJoin="round"
+        android:strokeLineCap="round" />
+
+    <!-- Laser Scanner Line Outer Glow (Soft Cyan) -->
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M22,54 h64"
+        android:strokeWidth="6"
+        android:strokeColor="#4406B6D4"
+        android:strokeLineCap="round" />
+
+    <!-- Laser Scanner Line (Accent Cyan) -->
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M22,54 h64"
+        android:strokeWidth="3"
+        android:strokeColor="#06B6D4"
+        android:strokeLineCap="round" />
+
+    <!-- Scanning Particles -->
+    <path
+        android:fillColor="#06B6D4"
+        android:pathData="M38,48 A2,2 0 1,1 37.99,48 Z" />
+    <path
+        android:fillColor="#06B6D4"
+        android:pathData="M70,60 A2,2 0 1,1 69.99,60 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M48,59 A1.5,1.5 0 1,1 47.99,59 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M60,49 A1.5,1.5 0 1,1 59.99,49 Z" />
+
+</vector>

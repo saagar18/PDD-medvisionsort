@@ -1,0 +1,280 @@
+/* Global Styles */
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+
+:root {
+  /* MedVisionSort Color Palette */
+  --bg-primary: #f8fafc; /* Very soft gray/white for clean background */
+  --bg-secondary: #ffffff; /* Pure white for cards */
+  --bg-tertiary: #f1f5f9;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  
+  --primary: #0284c7; /* Medical Blue */
+  --primary-light: #38bdf8;
+  --primary-dark: #0369a1;
+  --primary-neon: #0ea5e9;
+  
+  --accent: #06b6d4; /* Cyan */
+  --accent-light: #22d3ee;
+  
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+
+  /* Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --glass-shadow: 0 8px 32px 0 rgba(14, 165, 233, 0.05);
+
+  /* Shadows */
+  --shadow-soft: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+  --shadow-neon: 0 0 15px rgba(14, 165, 233, 0.4);
+
+  /* Border Radius */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+
+  /* Fonts */
+  --font-primary: 'Inter', sans-serif;
+  --font-heading: 'Outfit', sans-serif;
+
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease-in-out;
+}
+
+/* Dark Mode Variables (Optional for later) */
+body.dark-mode {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --glass-bg: rgba(30, 41, 59, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-primary);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+a {
+  text-decoration: none;
+  color: var(--primary);
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--primary-light);
+}
+
+/* Utility Classes */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: var(--radius-md);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  box-shadow: 0 4px 15px rgba(2, 132, 199, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-neon);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-outline:hover {
+  background: var(--primary);
+  color: white;
+}
+
+/* Angular Material Overrides */
+.mat-mdc-card {
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-soft) !important;
+}
+
+/* Skeleton Loader */
+.skeleton-box {
+  display: inline-block;
+  height: 1em;
+  position: relative;
+  overflow: hidden;
+  background-color: var(--bg-tertiary);
+  border-radius: 4px;
+}
+.skeleton-box::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0.5) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  animation: shimmer 2s infinite;
+  content: '';
+}
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Custom Premium Dialog Styling for MedVisionSort */
+.custom-dialog-container {
+  .mat-mdc-dialog-surface {
+    border-radius: var(--radius-md) !important;
+    padding: 2rem !important;
+    background: var(--bg-secondary) !important;
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08) !important;
+    border: 1px solid rgba(0, 0, 0, 0.03) !important;
+  }
+  
+  .mat-mdc-dialog-title {
+    font-family: var(--font-heading) !important;
+    font-weight: 800 !important;
+    font-size: 1.5rem !important;
+    color: var(--text-primary) !important;
+    margin-bottom: 0.75rem !important;
+    padding: 0 !important;
+  }
+
+  .dialog-info-banner {
+    background: var(--bg-tertiary);
+    border-left: 4px solid var(--primary);
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-sm);
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    strong {
+      color: var(--text-primary);
+    }
+  }
+
+  .mat-mdc-dialog-content {
+    padding: 0 !important;
+    margin-bottom: 1.5rem !important;
+    overflow: visible !important;
+  }
+
+  /* Form Field Custom Styling */
+  .mat-mdc-form-field {
+    width: 100%;
+    
+    .mat-mdc-text-field-wrapper {
+      background-color: var(--bg-tertiary) !important;
+      border: 1px solid rgba(0, 0, 0, 0.05) !important;
+      border-radius: var(--radius-sm) !important;
+      transition: all var(--transition-fast) !important;
+    }
+    
+    &.mat-focused .mat-mdc-text-field-wrapper {
+      border-color: var(--primary) !important;
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15) !important;
+    }
+
+    .mdc-notched-outline {
+      display: none !important; /* Hide native double-borders */
+    }
+  }
+
+  .mat-mdc-dialog-actions {
+    padding: 0 !important;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+  }
+
+  .btn-dialog-cancel {
+    border-radius: var(--radius-pill) !important;
+    font-weight: 600 !important;
+    padding: 0.5rem 1.5rem !important;
+    color: var(--text-secondary) !important;
+    border: 1px solid var(--text-muted) !important;
+    transition: all var(--transition-fast) !important;
+    &:hover {
+      background-color: var(--bg-tertiary) !important;
+      color: var(--text-primary) !important;
+    }
+  }
+
+  .btn-dialog-save {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: var(--radius-pill) !important;
+    font-weight: 600 !important;
+    padding: 0.5rem 1.75rem !important;
+    box-shadow: 0 4px 15px rgba(2, 132, 199, 0.25) !important;
+    transition: all var(--transition-normal) !important;
+    
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(2, 132, 199, 0.4) !important;
+    }
+  }
+}
+

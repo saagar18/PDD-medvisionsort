@@ -1,0 +1,99 @@
+<app-navbar></app-navbar>
+
+<main class="home-page">
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div class="hero-content">
+          <div class="badge">
+            <span class="badge-dot"></span>
+            Next-Gen Medical ML
+          </div>
+          <h1 class="hero-title">
+            ML-Powered Medical <br/>
+            <span class="text-gradient">Image Classification</span> <br/>
+            & Organization
+          </h1>
+          <p class="hero-subtitle">
+            Transform your diagnostic workflow with MedVisionSort. Automatically classify, 
+            sort, and manage X-rays, MRIs, and CT scans with 99%+ accuracy.
+          </p>
+          <div class="cta-group">
+            <button mat-flat-button class="btn-primary lg" routerLink="/upload">
+              Upload Scan
+              <mat-icon>arrow_forward</mat-icon>
+            </button>
+            <button mat-stroked-button class="btn-outline lg" routerLink="/about">
+              Learn More
+            </button>
+          </div>
+          
+          <div class="hero-stats" *ngIf="stats">
+            <div class="stat-item">
+              <span class="stat-val">{{stats.accuracy}}%</span>
+              <span class="stat-label">Accuracy</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-val">&lt;{{stats.processingTime}}s</span>
+              <span class="stat-label">Speed</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-val">{{stats.modalities}}+</span>
+              <span class="stat-label">Modalities</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="visual-wrapper">
+            <div class="main-image-placeholder glass-panel">
+              <div class="scan-line"></div>
+              <img src="https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=2000&auto=format&fit=crop" alt="Medical Scan">
+              <div class="floating-label type-label">
+                <mat-icon>check_circle</mat-icon>
+                <span>X-RAY DETECTED (99.8%)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features">
+    <div class="container">
+      <div class="section-header">
+        <h2>Intelligent Features</h2>
+        <p>Built for doctors, radiologists, and healthcare professionals.</p>
+      </div>
+      <div class="features-grid">
+        <mat-card class="feature-card glass-panel" *ngFor="let feature of features">
+          <mat-card-content>
+            <div class="feature-icon">
+              <mat-icon>{{feature.icon}}</mat-icon>
+            </div>
+            <h3>{{feature.title}}</h3>
+            <p>{{feature.desc}}</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-banner">
+    <div class="container">
+      <div class="cta-card glass-panel">
+        <div class="cta-content">
+          <h2>Ready to optimize your workflow?</h2>
+          <p>Join thousands of healthcare facilities using MedVisionSort today.</p>
+        </div>
+        <button mat-flat-button class="btn-primary" routerLink="/register">Get Started Free</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<app-footer></app-footer>

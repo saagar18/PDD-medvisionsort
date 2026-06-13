@@ -1,0 +1,62 @@
+# ════════════════════════════════════════════════════════════════
+# MedVisionSort Root — .gitignore
+# ════════════════════════════════════════════════════════════════
+
+# ── OS / System Files ───────────────────────────────────────────
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+Desktop.ini
+
+# ── Log Files ───────────────────────────────────────────────────
+*.log
+appium.log
+system.log
+backend.log
+frontend.log
+
+# ── Test Reports and Temporary Office Locks ───────────────────────
+*.xlsx
+*.docx
+.~lock.*
+auto_vuln.txt
+Vulnerability Test Results/
+
+# ── IDE & Project Tools ──────────────────────────────────────────
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ── Node / Javascript (Web Frontend) ─────────────────────────────
+node_modules/
+dist/
+.angular/
+connect.lock
+coverage/
+
+# ── Python (Backend and Testing) ──────────────────────────────────
+venv/
+.venv/
+env/
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.pytest_cache/
+.tox/
+
+# ── Android (Mobile App) ──────────────────────────────────────────
+.gradle/
+.kotlin/
+build/
+local.properties
+*.iml
+captures/
+.externalNativeBuild/
+.cxx/

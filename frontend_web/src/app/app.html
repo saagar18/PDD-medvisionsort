@@ -1,0 +1,140 @@
+<div class="hud-container">
+  
+  <header class="hud-header">
+    <div class="brand">
+      <div class="brand-sys">MED-SYS_V2.0 // NEURAL.VISION</div>
+      <h1>Medical <span>Classifier</span></h1>
+    </div>
+    
+    <div class="system-status">
+      <button class="btn-tech" (click)="trainModel()" [disabled]="isTraining()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="m17 7-5-5-5 5"/><path d="m17 17-5 5-5-5"/></svg>
+        [ INIT_TRAINING ]
+      </button>
+      
+      <div class="status-box">
+        <div class="blink-dot" [style.background]="isTraining() ? 'var(--warning)' : 'var(--success)'" [style.boxShadow]="isTraining() ? '0 0 10px var(--warning)' : '0 0 10px var(--success)'"></div>
+        <span>{{ isTraining() ? 'SYS.TRAINING' : 'SYS.ONLINE' }}</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="hud-main">
+    
+    <!-- Control Panel -->
+    <aside class="panel control-panel">
+      <div class="panel-header">
+        <span>> UPLINK_MODULE</span>
+        <span>ID: 8089</span>
+      </div>
+      
+      <div class="dropzone" 
+           [class.active]="isDragging()"
+           (dragover)="onDragOver($event)" 
+           (dragleave)="onDragLeave($event)" 
+           (drop)="onDrop($event)"
+           (click)="fileInput.click()">
+        
+        <div class="scanner-beam"></div>
+        
+        <svg class="dropzone-icon" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+        
+        <div style="font-family: var(--font-sans); font-size: 1.2rem; font-weight: 500; color: var(--text-main);">INPUT_SCANS</div>
+        <p>DROP FILES OR CLICK TO BROWSE</p>
+        <p style="font-size: 0.7rem; margin-top: 15px; color: var(--border-tech);">[ JPG / PNG / TIFF / BMP ]</p>
+        
+        <input type="file" #fileInput multiple accept="image/*" (change)="onFileSelected($event)" style="display: none;">
+      </div>
+
+      <div class="stats-container">
+        <div class="panel-header" style="margin: -20px -20px 20px -20px; border-top: none;">
+          <span>> DIAGNOSTIC_MATRIX</span>
+          <button style="background:none; border:none; color:var(--cyan-glow); font-family:var(--font-mono); cursor:pointer;" (click)="sortImages()" [disabled]="stats().pending === 0">
+            [ EXECUTE_SORT ]
+          </button>
+        </div>
+        
+        <div class="stat-row">
+          <span class="stat-label">Total_Scans</span>
+          <span class="stat-value">{{ stats().total | number:'2.0' }}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label" style="color: var(--teal-glow);">CT_Detected</span>
+          <span class="stat-value" style="color: var(--teal-glow);">{{ stats().ct | number:'2.0' }}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label" style="color: #c084fc;">MRI_Detected</span>
+          <span class="stat-value" style="color: #c084fc;">{{ stats().mri | number:'2.0' }}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label" style="color: #fbbf24;">XRAY_Detected</span>
+          <span class="stat-value" style="color: #fbbf24;">{{ stats().xray | number:'2.0' }}</span>
+        </div>
+        
+        <div class="sys-progress-track" *ngIf="isTraining()">
+          <div class="sys-progress-fill" [style.width.%]="trainingProgress()"></div>
+        </div>
+        <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--cyan-glow); margin-top: 5px; text-align: right;" *ngIf="isTraining()">
+          NEURAL_NET_TRAINING... {{ trainingProgress() }}%
+        </div>
+
+        <button class="btn-tech" style="width: 100%; margin-top: 20px; font-size: 0.8rem; justify-content: center;" (click)="clearAll()">
+          [ PURGE_DATA ]
+        </button>
+      </div>
+    </aside>
+
+    <!-- Analysis Grid -->
+    <section class="panel analysis-panel">
+      <div class="panel-header">
+        <span>> ANALYSIS_VIEWPORT</span>
+        <span>LIVE_FEED</span>
+      </div>
+      
+      <div class="analysis-grid" *ngIf="hasImages()">
+        <div class="scan-card" *ngFor="let img of images(); let i = index" [ngClass]="'status-' + img.status" [style.animation-delay]="(i * 0.1) + 's'">
+          <div class="scan-image-box">
+            <img [src]="img.url" [alt]="img.name">
+            <div class="crosshair"></div>
+          </div>
+          
+          <div class="scan-data">
+            <div class="scan-id">
+              <span>FILE: {{ img.name | slice:0:15 }}...</span>
+              <span>ID:{{ img.id | uppercase }}</span>
+            </div>
+            
+            <div class="scan-result" *ngIf="img.status === 'sorted'">
+              <span class="result-type" 
+                    [style.color]="img.predictedClass === 'ct' ? 'var(--teal-glow)' : img.predictedClass === 'mri' ? '#c084fc' : '#fbbf24'"
+                    [style.textShadow]="img.predictedClass === 'ct' ? '0 0 10px var(--teal-glow)' : img.predictedClass === 'mri' ? '0 0 10px #c084fc' : '0 0 10px #fbbf24'">
+                TYPE: {{ img.predictedClass | uppercase }}
+              </span>
+              <span class="result-conf"
+                    [style.borderColor]="img.predictedClass === 'ct' ? 'var(--teal-glow)' : img.predictedClass === 'mri' ? '#c084fc' : '#fbbf24'"
+                    [style.color]="img.predictedClass === 'ct' ? 'var(--teal-glow)' : img.predictedClass === 'mri' ? '#c084fc' : '#fbbf24'"
+                    style="background: transparent;">
+                CONF: {{ img.confidence }}%
+              </span>
+            </div>
+            
+            <div class="scan-result" *ngIf="img.status === 'scanning'">
+              <span class="result-type typing-text" style="color: var(--cyan-glow); font-size: 1rem;">ANALYZING_TISSUE...</span>
+            </div>
+            
+            <div class="scan-result" *ngIf="img.status === 'pending'">
+              <span class="result-type" style="color: var(--text-muted); font-size: 1rem;">STATUS: AWAITING_SORT</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div *ngIf="!hasImages()" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--border-tech); font-family: var(--font-mono);">
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 20px; opacity: 0.5;"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+        <p style="letter-spacing: 2px;">NO_DATA_IN_VIEWPORT</p>
+      </div>
+
+    </section>
+
+  </main>
+</div>

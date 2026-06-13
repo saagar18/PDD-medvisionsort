@@ -1,0 +1,33 @@
+<header class="dashboard-header">
+  <div class="header-left">
+    <h1>Image Gallery</h1>
+    <p>Browse and filter all medical scans</p>
+  </div>
+</header>
+
+<div class="gallery-controls glass-panel">
+  <mat-form-field appearance="outline" class="search-field">
+    <mat-label>Search patients or scan types</mat-label>
+    <mat-icon matPrefix>search</mat-icon>
+    <input matInput [(ngModel)]="searchTerm" (input)="applyFilters()">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="filter-field">
+    <mat-label>Modality</mat-label>
+    <mat-select [(ngModel)]="filterType" (selectionChange)="applyFilters()">
+      <mat-option value="All">All Modalities</mat-option>
+      <mat-option value="X-Ray">X-Ray</mat-option>
+      <mat-option value="MRI">MRI</mat-option>
+      <mat-option value="CT Scan">CT Scan</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+<div class="gallery-grid">
+  <app-image-card *ngFor="let img of filteredImages" [image]="img"></app-image-card>
+</div>
+
+<div class="no-results" *ngIf="filteredImages.length === 0">
+  <mat-icon>search_off</mat-icon>
+  <p>No images found matching your criteria</p>
+</div>

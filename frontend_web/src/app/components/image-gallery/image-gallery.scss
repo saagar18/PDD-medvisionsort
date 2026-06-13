@@ -1,0 +1,61 @@
+:host {
+  display: block;
+}
+
+.dashboard-header {
+  margin-bottom: 2.5rem;
+  h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+  p { color: var(--text-secondary); }
+}
+
+.gallery-controls {
+  padding: 1.5rem;
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+  align-items: center;
+
+  .search-field {
+    flex: 1;
+  }
+
+  .filter-field {
+    width: 200px;
+  }
+
+  ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+  }
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.no-results {
+  text-align: center;
+  padding: 4rem 0;
+  color: var(--text-muted);
+  
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+  }
+}
+
+@media (max-width: 768px) {
+  .gallery-controls {
+    flex-direction: column;
+    align-items: stretch;
+    
+    .filter-field {
+      width: 100%;
+    }
+  }
+}

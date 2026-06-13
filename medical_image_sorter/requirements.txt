@@ -1,0 +1,18 @@
+# Core ML — use tensorflow on Linux/Windows, tensorflow-macos + tensorflow-metal on Apple Silicon
+tensorflow
+numpy
+opencv-python
+Pillow
+watchdog
+scikit-learn
+
+# Core web framework
+flask
+werkzeug
+sqlalchemy
+
+# Security additions
+flask-limiter       # Rate limiting
+firebase-admin      # Firebase ID token verification
+filetype            # MIME magic-byte validation (no system libs required)
+python-dotenv       # Load .env files

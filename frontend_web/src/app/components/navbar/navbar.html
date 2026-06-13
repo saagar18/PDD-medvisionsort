@@ -1,0 +1,31 @@
+<header class="navbar-header glass-panel">
+  <div class="container">
+    <div class="logo" routerLink="/">
+      <div class="logo-icon">
+        <mat-icon>visibility</mat-icon>
+      </div>
+      <span class="logo-text">MedVision<span>Sort</span></span>
+    </div>
+
+    <nav class="nav-links" [class.active]="isMenuOpen">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="isMenuOpen = false">Home</a>
+      <a routerLink="/features" routerLinkActive="active" (click)="isMenuOpen = false">Features</a>
+      <a routerLink="/about" routerLinkActive="active" (click)="isMenuOpen = false">About</a>
+      <a routerLink="/dashboard" routerLinkActive="active" (click)="isMenuOpen = false">Dashboard</a>
+      <a routerLink="/upload" routerLinkActive="active" (click)="isMenuOpen = false">Upload</a>
+      <a routerLink="/contact" routerLinkActive="active" (click)="isMenuOpen = false">Contact</a>
+      <div class="mobile-actions">
+        <button mat-flat-button class="btn-primary" routerLink="/login">Sign In</button>
+      </div>
+    </nav>
+
+    <div class="actions">
+      <button mat-button class="btn-login" routerLink="/login">Log In</button>
+      <button mat-flat-button class="btn-primary" routerLink="/register">Get Started</button>
+    </div>
+
+    <button class="mobile-toggle" (click)="toggleMenu()">
+      <mat-icon>{{ isMenuOpen ? 'close' : 'menu' }}</mat-icon>
+    </button>
+  </div>
+</header>

@@ -1,0 +1,47 @@
+# ════════════════════════════════════════════════════════════════
+# MedVisionSort Backend — .gitignore
+# ════════════════════════════════════════════════════════════════
+
+# ── Python artefacts ─────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+.Python
+env/
+venv/
+.venv/
+*.egg
+
+# ── Log files (VULN-16 FIX) ──────────────────────────────────────
+# Logs may contain sensitive operational data and internal paths.
+*.log
+backend.log
+system.log
+
+# ── Database files (may contain patient-adjacent data) ───────────
+*.db
+*.sqlite
+*.sqlite3
+db.json
+
+# ── Secrets & credentials (CRITICAL — never commit) ──────────────
+.env
+serviceAccountKey.json
+*.pem
+*.key
+*.p12
+*.pfx
+
+# ── macOS ─────────────────────────────────────────────────────────
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# ── Temp / scratch files ──────────────────────────────────────────
+temp/
+*.tmp
+*.bak

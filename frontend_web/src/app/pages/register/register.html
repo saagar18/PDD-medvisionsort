@@ -1,0 +1,54 @@
+<div class="auth-page">
+  <div class="auth-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+  </div>
+
+  <div class="auth-container">
+    <mat-card class="auth-card glass-panel">
+      <div class="auth-header">
+        <div class="logo" routerLink="/">
+          <div class="logo-icon">
+            <mat-icon>visibility</mat-icon>
+          </div>
+          <span>MedVisionSort</span>
+        </div>
+        <h1>Create Account</h1>
+        <p>Start organizing your medical images</p>
+      </div>
+
+      <div *ngIf="errorMessage" class="error-message">
+        <mat-icon>error</mat-icon>
+        <span>{{ errorMessage }}</span>
+      </div>
+
+      <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Full Name</mat-label>
+          <input matInput name="name" [(ngModel)]="registerData.name" required>
+          <mat-icon matPrefix>person</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email Address</mat-label>
+          <input matInput type="email" name="email" [(ngModel)]="registerData.email" required>
+          <mat-icon matPrefix>email</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Password</mat-label>
+          <input matInput [type]="showPassword ? 'text' : 'password'" name="password" [(ngModel)]="registerData.password" required>
+          <mat-icon matPrefix>lock</mat-icon>
+        </mat-form-field>
+
+        <button mat-flat-button class="btn-primary full-width" type="submit" [disabled]="!registerForm.valid">
+          Register
+        </button>
+
+        <div class="auth-footer">
+          <p>Already have an account? <a routerLink="/login">Login</a></p>
+        </div>
+      </form>
+    </mat-card>
+  </div>
+</div>

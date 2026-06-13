@@ -1,0 +1,11 @@
+<div 
+  class="drop-zone glass-panel" 
+  (drop)="onDrop($event)" 
+  (dragover)="onDragOver($event)"
+>
+  <mat-icon class="upload-icon">camera_alt</mat-icon>
+  <h3>Capture or Drop Scans</h3>
+  <p>Supported formats: DICOM, JPG, PNG, JPEG</p>
+  <input type="file" #fileInput (change)="onFileSelected($event)" hidden>
+  <button mat-flat-button class="btn-primary" (click)="fileInput.click()">Browse Files</button>
+</div>

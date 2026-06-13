@@ -1,0 +1,63 @@
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="logo">
+      <div class="logo-icon">
+        <mat-icon>visibility</mat-icon>
+      </div>
+      <span class="logo-text">MedVision</span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-group">
+      <p class="group-label">Menu</p>
+      <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
+        <mat-icon>dashboard</mat-icon>
+        <span>Dashboard</span>
+      </a>
+      <a routerLink="/upload" routerLinkActive="active" class="nav-item">
+        <mat-icon>camera_alt</mat-icon>
+        <span>Image Capture</span>
+      </a>
+      <a routerLink="/images" routerLinkActive="active" class="nav-item">
+        <mat-icon>folder</mat-icon>
+        <span>Image Gallery</span>
+      </a>
+    </div>
+
+    <div class="nav-group">
+      <p class="group-label">Analytics</p>
+      <a routerLink="/diagnostics" routerLinkActive="active" class="nav-item">
+        <mat-icon>biotech</mat-icon>
+        <span>Diagnostics</span>
+      </a>
+      <a routerLink="/statistics" routerLinkActive="active" class="nav-item">
+        <mat-icon>pie_chart</mat-icon>
+        <span>Statistics</span>
+      </a>
+      <a routerLink="/reports" routerLinkActive="active" class="nav-item">
+        <mat-icon>assignment</mat-icon>
+        <span>Reports</span>
+      </a>
+    </div>
+
+    <div class="nav-group">
+      <p class="group-label">Settings</p>
+      <a routerLink="/profile" routerLinkActive="active" class="nav-item">
+        <mat-icon>person</mat-icon>
+        <span>Profile</span>
+      </a>
+      <a routerLink="/settings" routerLinkActive="active" class="nav-item">
+        <mat-icon>settings</mat-icon>
+        <span>General Settings</span>
+      </a>
+    </div>
+  </nav>
+
+  <div class="sidebar-footer">
+    <button mat-button class="logout-btn" (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      <span>Logout</span>
+    </button>
+  </div>
+</aside>

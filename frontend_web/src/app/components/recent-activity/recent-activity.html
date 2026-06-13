@@ -1,0 +1,112 @@
+<section class="recent-uploads glass-panel">
+  <div class="section-header">
+    <div class="header-left">
+      <h2>Recent Classifications</h2>
+    </div>
+    <div class="header-right">
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Filter records...</mat-label>
+        <mat-icon matPrefix>filter_list</mat-icon>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Search anything...">
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="table-container">
+    <table mat-table [dataSource]="dataSource" class="dashboard-table">
+      <!-- S.NO Column -->
+      <ng-container matColumnDef="sno">
+        <th mat-header-cell *matHeaderCellDef> S.NO </th>
+        <td mat-cell *matCellDef="let element; let i = index"> {{i + 1 + (paginator ? paginator.pageIndex * paginator.pageSize : 0)}} </td>
+      </ng-container>
+
+      <!-- DATE Column -->
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef> DATE </th>
+        <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+      </ng-container>
+
+      <!-- SCAN Column (Image) -->
+      <ng-container matColumnDef="image">
+        <th mat-header-cell *matHeaderCellDef> SCAN </th>
+        <td mat-cell *matCellDef="let element">
+          <div class="table-img">
+            <img [src]="element.url" alt="Scan">
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- IMG TYPE Column -->
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef> IMG TYPE </th>
+        <td mat-cell *matCellDef="let element"> 
+          <span class="type-badge">{{element.type}}</span>
+        </td>
+      </ng-container>
+
+      <!-- ACCURACY Column -->
+      <ng-container matColumnDef="accuracy">
+        <th mat-header-cell *matHeaderCellDef> ACCURACY </th>
+        <td mat-cell *matCellDef="let element"> 
+          <div class="accuracy-cell">
+            <span class="val">{{(element.confidence * 100).toFixed(1)}}%</span>
+            <div class="tiny-bar">
+              <div class="fill" [style.width.%]="element.confidence * 100"></div>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- PATIENT_ID Column -->
+      <ng-container matColumnDef="patientId">
+        <th mat-header-cell *matHeaderCellDef> PATIENT_ID </th>
+        <td mat-cell *matCellDef="let element"> {{element.patientId}} </td>
+      </ng-container>
+
+      <!-- PATIENT_NAME Column -->
+      <ng-container matColumnDef="patientName">
+        <th mat-header-cell *matHeaderCellDef> PATIENT_NAME </th>
+        <td mat-cell *matCellDef="let element"> {{element.patientName}} </td>
+      </ng-container>
+
+      <!-- STATUS Column -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef> STATUS </th>
+        <td mat-cell *matCellDef="let element">
+          <span class="status-badge" [class]="element.status.toLowerCase()">
+            {{element.status}}
+          </span>
+        </td>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> </th>
+        <td mat-cell *matCellDef="let element">
+          <div class="action-btns">
+            <button mat-button class="view-btn" (click)="viewImage(element)">
+              <mat-icon>image</mat-icon>
+              View Scan
+            </button>
+            <button mat-icon-button color="primary" [routerLink]="['/image', element.id]" matTooltip="Full Analysis">
+              <mat-icon>visibility</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="deleteImage(element.id)" matTooltip="Delete">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <!-- MatPaginator for dashboard table (10 items per page) -->
+    <mat-paginator [pageSizeOptions]="[10, 25, 50]"
+                   pageSize="10"
+                   showFirstLastButtons
+                   class="glass-paginator">
+    </mat-paginator>
+  </div>
+</section>
