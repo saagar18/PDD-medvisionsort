@@ -40,4 +40,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Security-Vulnerabilities-Report
-          path: pdd_mobileapp/mobile_app/Security_Vulnerability_Report_v5_Mobileapp.xlsx
+          path: Vulnerability Test Results/Security_Vulnerability_Report_v5_Mobileapp.xlsx
