@@ -1,4 +1,4 @@
-name: MedVisionSort E2E & Security Test Verification
+name: MedVisionSort Website — E2E & Security Test Verification
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   verify:
-    name: Verify Test Reports
+    name: Verify Website Test Reports
     runs-on: ubuntu-latest
 
     steps:
@@ -26,18 +26,18 @@ jobs:
           python -m pip install --upgrade pip
           pip install openpyxl
 
-      - name: Publish Test Results to Job Summary
+      - name: Publish Website Test Results to Job Summary
         run: |
-          python tests/publish_results.py
+          python tests/publish_results_website.py
 
-      - name: Upload E2E Test Report
+      - name: Upload Website E2E Test Report
         uses: actions/upload-artifact@v4
         with:
-          name: E2E-Test-Report
-          path: E2E_Test_Report_MedVisionSort_Appium.xlsx
+          name: Website-E2E-Test-Report
+          path: E2E_Test_Report_MedVisionSort_2026-06-11T18-56-04.xlsx
 
-      - name: Upload Security Vulnerabilities Report
+      - name: Upload Website Security Vulnerabilities Report
         uses: actions/upload-artifact@v4
         with:
-          name: Security-Vulnerabilities-Report
-          path: Vulnerability Test Results/Security_Vulnerability_Report_v5_Mobileapp.xlsx
+          name: Website-Security-Vulnerabilities-Report
+          path: "Vulnerability Test Results/Security_Vulnerability_Report_v5_website.xlsx"
