@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatDialogModule, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { MedicalImage } from '../../services/mock-api.service';
+import { MedicalImage } from '../../services/medical-api.service';
 
 @Component({
   selector: 'app-image-viewer-dialog',

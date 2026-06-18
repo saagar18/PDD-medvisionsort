@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ImageCardComponent } from '../../components/image-card/image-card';
-import { MockApiService, MedicalImage } from '../../services/mock-api.service';
+import { MedicalApiService, MedicalImage } from '../../services/medical-api.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -29,10 +29,10 @@ export class ImageGalleryComponent implements OnInit {
   searchTerm: string = '';
   filterType: string = 'All';
 
-  constructor(private mockApi: MockApiService) {}
+  constructor(private medicalApi: MedicalApiService) {}
 
   ngOnInit() {
-    this.mockApi.getRecentImages().subscribe(data => {
+    this.medicalApi.getRecentImages().subscribe(data => {
       this.images = data;
       this.filteredImages = data;
     });

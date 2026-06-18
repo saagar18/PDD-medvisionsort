@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,6 +8,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSelectModule } from '@angular/material/select';
+import { FormsModule } from '@angular/forms';
+import { Auth } from '../../services/auth';
+import { MedicalApiService } from '../../services/medical-api.service';
 
 @Component({
   selector: 'app-settings',
@@ -21,7 +24,8 @@ import { MatSelectModule } from '@angular/material/select';
     MatInputModule, 
     MatButtonModule, 
     MatSlideToggleModule,
-    MatSelectModule
+    MatSelectModule,
+    FormsModule
   ],
   template: `
     <header class="dashboard-header">
@@ -43,15 +47,15 @@ import { MatSelectModule } from '@angular/material/select';
             <div class="settings-grid">
               <mat-form-field appearance="outline">
                 <mat-label>Display Name</mat-label>
-                <input matInput value="Dr. Saagar">
+                <input matInput [value]="profileName" disabled>
               </mat-form-field>
               <mat-form-field appearance="outline">
                 <mat-label>Specialization</mat-label>
-                <input matInput value="Senior Radiologist">
+                <input matInput [value]="profileRole" disabled>
               </mat-form-field>
               <mat-form-field appearance="outline">
                 <mat-label>Email Address</mat-label>
-                <input matInput value="dr.saagar@medvisionsort.com" disabled>
+                <input matInput [value]="profileEmail" disabled>
               </mat-form-field>
             </div>
             <button mat-flat-button class="btn-primary">Update Profile</button>
@@ -71,27 +75,27 @@ import { MatSelectModule } from '@angular/material/select';
                   <span class="label">Auto-Classification</span>
                   <span class="desc">Automatically sort images upon upload</span>
                 </div>
-                <mat-slide-toggle checked></mat-slide-toggle>
+                <mat-slide-toggle [(ngModel)]="settings.autoClassification" (change)="saveSettings()"></mat-slide-toggle>
               </div>
               <div class="toggle-item">
                 <div class="info">
                   <span class="label">High Confidence Filter</span>
                   <span class="desc">Flag results below 90% confidence for manual review</span>
                 </div>
-                <mat-slide-toggle checked></mat-slide-toggle>
+                <mat-slide-toggle [(ngModel)]="settings.highConfidenceFilter" (change)="saveSettings()"></mat-slide-toggle>
               </div>
               <div class="toggle-item">
                 <div class="info">
                   <span class="label">DICOM Metadata Extraction</span>
                   <span class="desc">Parse patient info directly from scan metadata</span>
                 </div>
-                <mat-slide-toggle checked></mat-slide-toggle>
+                <mat-slide-toggle [(ngModel)]="settings.dicomExtraction" (change)="saveSettings()"></mat-slide-toggle>
               </div>
             </div>
             
             <mat-form-field appearance="outline" class="select-field">
               <mat-label>AI Model Version</mat-label>
-              <mat-select value="v2.4-stable">
+              <mat-select [(ngModel)]="settings.aiModelVersion" (selectionChange)="saveSettings()">
                 <mat-option value="v2.4-stable">v2.4 Stable (Latest)</mat-option>
                 <mat-option value="v2.5-beta">v2.5 Beta (Experimental)</mat-option>
               </mat-select>
@@ -159,4 +163,41 @@ import { MatSelectModule } from '@angular/material/select';
     ::ng-deep .mat-mdc-tab .mdc-tab__text-label { display: flex; align-items: center; gap: 0.75rem; font-weight: 600; }
   `]
 })
-export class SettingsComponent {}
+export class SettingsComponent implements OnInit {
+  private auth = inject(Auth);
+  private api = inject(MedicalApiService);
+
+  profileName = '';
+  profileRole = '';
+  profileEmail = '';
+
+  settings = {
+    autoClassification: true,
+    highConfidenceFilter: true,
+    dicomExtraction: true,
+    aiModelVersion: 'v2.4-stable'
+  };
+
+  ngOnInit() {
+    const user = this.auth.currentUser();
+    if (user) {
+      this.profileName = user.name || '';
+      this.profileRole = user.role || 'Radiologist';
+      this.profileEmail = user.email || '';
+      
+      this.api.getSettings(user.id!).subscribe({
+        next: (s) => this.settings = s,
+        error: (err) => console.error('Error fetching settings', err)
+      });
+    }
+  }
+
+  saveSettings() {
+    const user = this.auth.currentUser();
+    if (!user) return;
+    this.api.updateSettings(user.id!, this.settings).subscribe({
+      next: () => console.log('Settings saved'),
+      error: (err) => console.error('Error saving settings', err)
+    });
+  }
+}

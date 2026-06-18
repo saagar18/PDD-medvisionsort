@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 import { StatsCardsComponent } from '../../components/stats-cards/stats-cards';
 import { RecentActivityComponent } from '../../components/recent-activity/recent-activity';
-import { MockApiService, MedicalImage } from '../../services/mock-api.service';
+import { MedicalApiService, MedicalImage } from '../../services/medical-api.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -25,10 +25,10 @@ export class Dashboard implements OnInit {
   stats: any = {};
   recentImages: MedicalImage[] = [];
 
-  constructor(private mockApi: MockApiService) {}
+  constructor(private medicalApi: MedicalApiService) {}
 
   ngOnInit() {
-    this.mockApi.getStats().subscribe(data => this.stats = data);
-    this.mockApi.getRecentImages().subscribe(data => this.recentImages = data);
+    this.medicalApi.getStats().subscribe(data => this.stats = data);
+    this.medicalApi.getRecentImages().subscribe(data => this.recentImages = data);
   }
 }

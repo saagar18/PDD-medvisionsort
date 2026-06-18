@@ -9,7 +9,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
 import { RouterModule } from '@angular/router';
-import { MockApiService, MedicalImage } from '../../services/mock-api.service';
+import { MedicalApiService, MedicalImage } from '../../services/medical-api.service';
 import { ImageViewerDialogComponent } from '../image-viewer-dialog/image-viewer-dialog';
 
 @Component({
@@ -38,7 +38,7 @@ export class RecentActivityComponent implements OnChanges, AfterViewInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private dialog: MatDialog, private mockApi: MockApiService) {}
+  constructor(private dialog: MatDialog, private medicalApi: MedicalApiService) {}
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['recentImages'] && this.recentImages) {
@@ -73,7 +73,7 @@ export class RecentActivityComponent implements OnChanges, AfterViewInit {
 
   deleteImage(id: string) {
     if (confirm('Are you sure you want to delete this scan record?')) {
-      this.mockApi.deleteImage(id).subscribe(() => {
+      this.medicalApi.deleteImage(id).subscribe(() => {
         this.dataSource.data = this.dataSource.data.filter(img => img.id !== id);
       });
     }

@@ -283,9 +283,9 @@ def _build_findings_sheet(ws):
          "Acceptable for single-process local deployment. Redis storage documented for production scaling.",
          "✅ LOW / Accepted"),
 
-        ("V4-09", "MEDIUM", "Business Logic — Mock Data in Firestore",
-         "Mock patient records auto-seeded into live Firestore on every cold start",
-         "frontend_web/src/app/services/mock-api.service.ts",
+        ("V4-09", "MEDIUM", "Business Logic — Default Data in Firestore",
+         "Default patient records auto-seeded into live Firestore on every cold start",
+         "frontend_web/src/app/services/medical-api.service.ts",
          "seedInitialDataIfNeeded() wrote 15 fake records (with patient names/IDs) to the live medical_images collection on startup.",
          "Removed seedInitialDataIfNeeded() from production constructor. Use a separate dev-only script for seeding.",
          "✅ RESOLVED"),
@@ -313,7 +313,7 @@ def _build_findings_sheet(ws):
 
         ("V4-13", "LOW",    "Configuration — Angular DI Context",
          "inject() called inside Observable constructor callback (wrong DI context)",
-         "frontend_web/src/app/services/mock-api.service.ts (classifyImage)",
+         "frontend_web/src/app/services/medical-api.service.ts (classifyImage)",
          "inject(HttpClient) inside new Observable() callback is outside injection context. Throws NG0203 at runtime in Angular 16+.",
          "HttpClient moved to class-level field injection. classifyImage() now returns this.http.post(...) directly.",
          "✅ RESOLVED"),
@@ -404,8 +404,8 @@ def _build_fixes_sheet(ws):
          'if not _validate_image_mime(file_path):\n    os.remove(file_path)\n    return\nservice.process_file(file_path, filename)'),
 
         ("V4-09", "MEDIUM",
-         "frontend_web/src/app/services/mock-api.service.ts",
-         "Removed automatic seeding of mock patient records to live Firestore",
+         "frontend_web/src/app/services/medical-api.service.ts",
+         "Removed automatic seeding of default patient records to live Firestore",
          "constructor() {\n  this.seedInitialDataIfNeeded();\n}",
          "constructor() {\n  // Seeding removed — dev-only script required\n}"),
 
@@ -422,7 +422,7 @@ def _build_fixes_sheet(ws):
          "Content-Security-Policy: default-src 'none'; ...\nStrict-Transport-Security: max-age=31536000"),
 
         ("V4-13", "LOW",
-         "frontend_web/src/app/services/mock-api.service.ts\n(classifyImage)",
+         "frontend_web/src/app/services/medical-api.service.ts\n(classifyImage)",
          "Fixed inject() called outside Angular DI context — moved to class field",
          "return new Observable(observer => {\n  const http = inject(HttpClient); // wrong\n  ...\n})",
          "private http = inject(HttpClient); // correct\nclassifyImage() {\n  return this.http.post(...);\n}"),
@@ -483,7 +483,7 @@ def _build_posture_sheet(ws):
         ("Security Headers",            "❌  None",                                   "✅  X-Frame, X-Content-Type, CSP, HSTS, etc."),
         ("XSS (Report Download)",       "❌  Unescaped Firestore data in HTML",       "✅  escapeHtml() applied to all fields"),
         ("Classification Logic",        "❌  Random fake results written to Firestore","✅  Real ML backend call via Flask"),
-        ("Mock Data Seeding",           "N/A (feature didn't exist)",                  "✅  Removed from production code"),
+        ("Default Data Seeding",          "N/A (feature didn't exist)",                  "✅  Removed from production code"),
         ("Sensitive Log Data",          "❌  Full paths + filenames in logs",          "✅  Logs cleared; opaque messages only"),
         ("Exception Exposure",          "❌  str(exc) returned in API response",       "✅  Generic error messages"),
         ("Email Enumeration",           "❌  Different error per Firebase code",       "✅  Normalized generic message"),

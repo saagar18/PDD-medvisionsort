@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -7,6 +7,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { Auth } from '../../services/auth';
+import { MedicalApiService } from '../../services/medical-api.service';
 
 @Component({
   selector: 'app-profile',
@@ -173,16 +175,19 @@ import { MatInputModule } from '@angular/material/input';
     @media (max-width: 968px) { .profile-grid { grid-template-columns: 1fr; } .form-grid { grid-template-columns: 1fr; } }
   `]
 })
-export class ProfileComponent {
+export class ProfileComponent implements OnInit {
   isEditing = false;
   showToast = false;
 
+  private auth = inject(Auth);
+  private api = inject(MedicalApiService);
+
   profile = {
-    name: 'Dr. Saagar',
-    role: 'Senior Radiologist',
-    email: 'dr.saagar@medvisionsort.com',
-    organization: 'Central Diagnostic Center',
-    memberSince: 'January 2024'
+    name: '',
+    role: '',
+    email: '',
+    organization: '',
+    memberSince: 'January 2026'
   };
 
   editName = '';
@@ -190,11 +195,20 @@ export class ProfileComponent {
   editEmail = '';
   editOrganization = '';
 
+  ngOnInit() {
+    const user = this.auth.currentUser();
+    if (user) {
+      this.profile.name = user.name || '';
+      this.profile.role = user.role || 'Radiologist';
+      this.profile.email = user.email || '';
+      this.profile.organization = user.hospital || 'Hospital';
+    }
+  }
+
   getInitials(): string {
     if (!this.profile.name) return 'DS';
     const parts = this.profile.name.split(' ');
     if (parts.length >= 2) {
-      // Handle titles like Dr.
       if (parts[0].toLowerCase().includes('dr')) {
         return (parts[1].charAt(0) + (parts[2] ? parts[2].charAt(0) : parts[1].charAt(1))).toUpperCase();
       }
@@ -212,17 +226,29 @@ export class ProfileComponent {
   }
 
   saveChanges() {
+    const user = this.auth.currentUser();
+    if (!user) return;
+    
     this.profile.name = this.editName;
     this.profile.role = this.editRole;
-    this.profile.email = this.editEmail;
     this.profile.organization = this.editOrganization;
-    this.isEditing = false;
-
-    // Show a beautiful toast notification
-    this.showToast = true;
-    setTimeout(() => {
-      this.showToast = false;
-    }, 3000);
+    
+    this.api.updateProfile(user.id!, {
+      name: this.editName,
+      role: this.editRole,
+      hospital: this.editOrganization
+    }).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.auth.currentUser.set(res.user);
+          localStorage.setItem('currentUser', JSON.stringify(res.user));
+          this.isEditing = false;
+          this.showToast = true;
+          setTimeout(() => this.showToast = false, 3000);
+        }
+      },
+      error: (err) => console.error('Error updating profile', err)
+    });
   }
 
   cancelEdit() {

@@ -4,7 +4,7 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { MockApiService, MedicalImage } from '../../services/mock-api.service';
+import { MedicalApiService, MedicalImage } from '../../services/medical-api.service';
 
 @Component({
   selector: 'app-image-details',
@@ -87,12 +87,12 @@ export class ImageDetailsComponent implements OnInit {
   imageId: string | null = null;
   image: MedicalImage | undefined;
 
-  constructor(private route: ActivatedRoute, private mockApi: MockApiService) {}
+  constructor(private route: ActivatedRoute, private medicalApi: MedicalApiService) {}
 
   ngOnInit() {
     this.imageId = this.route.snapshot.paramMap.get('id');
     if (this.imageId) {
-      this.mockApi.getImageById(this.imageId).subscribe(img => {
+      this.medicalApi.getImageById(this.imageId).subscribe(img => {
         this.image = img;
       });
     }

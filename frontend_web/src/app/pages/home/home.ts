@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { NavbarComponent } from '../../components/navbar/navbar';
 import { FooterComponent } from '../../components/footer/footer';
-import { MockApiService } from '../../services/mock-api.service';
+import { MedicalApiService } from '../../services/medical-api.service';
 
 @Component({
   selector: 'app-home',
@@ -49,10 +49,10 @@ export class Home implements OnInit {
     }
   ];
 
-  constructor(private mockApi: MockApiService) {}
+  constructor(private medicalApi: MedicalApiService) {}
 
   ngOnInit() {
-    this.mockApi.getStats().subscribe(data => {
+    this.medicalApi.getStats().subscribe(data => {
       this.stats = data;
     });
   }

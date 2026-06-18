@@ -1,4 +1,4 @@
-import { Component, ViewChild, AfterViewInit, Inject } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, Inject, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -11,6 +11,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
+import { MedicalApiService } from '../../services/medical-api.service';
 
 interface MedicalReport {
   id: string;
@@ -252,6 +253,7 @@ export class ReportsComponent implements AfterViewInit {
   showToast = false;
   toastMessage = '';
 
+  private api = inject(MedicalApiService);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(private dialog: MatDialog) {
@@ -313,100 +315,43 @@ Verification:     Authorized by Dr. Saagar
 
     dialogRef.afterClosed().subscribe(newStatus => {
       if (newStatus) {
-        report.status = newStatus;
-        this.toastMessage = `Updated report ${report.id} to ${newStatus}!`;
-        this.showToast = true;
-        setTimeout(() => this.showToast = false, 3000);
+        this.api.updateReportStatus(report.id, newStatus).subscribe({
+          next: () => {
+            report.status = newStatus;
+            this.toastMessage = `Updated report ${report.id} to ${newStatus}!`;
+            this.showToast = true;
+            setTimeout(() => this.showToast = false, 3000);
+          },
+          error: (err) => console.error('Error updating report', err)
+        });
       }
     });
   }
 
   createNewReport() {
-    this.toastMessage = 'Creating new diagnostic report...';
-    this.showToast = true;
-    setTimeout(() => this.showToast = false, 3000);
+    this.api.createReport({
+      patientName: 'Jane Smith',
+      patientId: 'PID-8821',
+      type: 'Brain MRI Scan',
+      status: 'Draft'
+    }).subscribe({
+      next: (report) => {
+        this.dataSource.data = [report, ...this.dataSource.data];
+        this.toastMessage = 'Created new diagnostic report!';
+        this.showToast = true;
+        setTimeout(() => this.showToast = false, 3000);
+      },
+      error: (err) => console.error('Error creating report', err)
+    });
   }
 
   generateReports() {
-    const patientPool = [
-      { name: 'John Doe', id: 'PID-1029' },
-      { name: 'Jane Smith', id: 'PID-8821' },
-      { name: 'Mike Johnson', id: 'PID-4492' },
-      { name: 'Sarah Williams', id: 'PID-2291' },
-      { name: 'Robert Brown', id: 'PID-1102' },
-      { name: 'Aarav Sharma', id: 'PID-7452' },
-      { name: 'Priya Patel', id: 'PID-6298' },
-      { name: 'Rajesh Kumar', id: 'PID-4521' },
-      { name: 'Anjali Mehta', id: 'PID-3304' },
-      { name: 'Sanjay Gupta', id: 'PID-8932' },
-      { name: 'Sunita Rao', id: 'PID-7215' },
-      { name: 'Vikram Singh', id: 'PID-6671' },
-      { name: 'Aditi Joshi', id: 'PID-5091' },
-      { name: 'Devendra Verma', id: 'PID-1402' },
-      { name: 'Neha Sharma', id: 'PID-2245' },
-      { name: 'Rohan Das', id: 'PID-9042' },
-      { name: 'Kiran Nair', id: 'PID-1104' },
-      { name: 'Amit Mishra', id: 'PID-4491' },
-      { name: 'Pooja Reddy', id: 'PID-3367' },
-      { name: 'Rahul Saxena', id: 'PID-8910' },
-      { name: 'Vijay Yadav', id: 'PID-4105' },
-      { name: 'Nisha Sen', id: 'PID-1982' },
-      { name: 'Harish Pillai', id: 'PID-8722' },
-      { name: 'Meera Nair', id: 'PID-9102' },
-      { name: 'Deepak Chawla', id: 'PID-2394' },
-      { name: 'Ritu Kapoor', id: 'PID-1029' }
-    ];
-
-    const scanTypes = ['Chest X-Ray Analysis', 'Brain MRI Scan', 'Abdominal CT Scan', 'Pelvic X-Ray Analysis', 'Knee MRI Analysis'];
-    let reportIdNum = 1;
-    const reportsList: MedicalReport[] = [];
-
-    // 1. Generate 12 Pending Review
-    for (let i = 0; i < 12; i++) {
-      const patient = patientPool[i % patientPool.length];
-      const scanType = scanTypes[i % scanTypes.length];
-      const date = `2026-05-${String(30 - (i % 15)).padStart(2, '0')}`;
-      reportsList.push({
-        id: `REP-2026-${String(reportIdNum++).padStart(3, '0')}`,
-        patientName: patient.name,
-        patientId: patient.id,
-        type: scanType,
-        date: date,
-        status: 'Pending Review'
-      });
-    }
-
-    // 2. Generate 4 Drafts
-    for (let i = 0; i < 4; i++) {
-      const patient = patientPool[(i + 12) % patientPool.length];
-      const scanType = scanTypes[(i + 2) % scanTypes.length];
-      const date = `2026-05-${String(15 - (i % 10)).padStart(2, '0')}`;
-      reportsList.push({
-        id: `REP-2026-${String(reportIdNum++).padStart(3, '0')}`,
-        patientName: patient.name,
-        patientId: patient.id,
-        type: scanType,
-        date: date,
-        status: 'Draft'
-      });
-    }
-
-    // 3. Generate 60 Finalized
-    for (let i = 0; i < 60; i++) {
-      const patient = patientPool[(i + 16) % patientPool.length];
-      const scanType = scanTypes[(i + 1) % scanTypes.length];
-      const date = `2026-05-${String(28 - (i % 25)).padStart(2, '0')}`;
-      reportsList.push({
-        id: `REP-2026-${String(reportIdNum++).padStart(3, '0')}`,
-        patientName: patient.name,
-        patientId: patient.id,
-        type: scanType,
-        date: date,
-        status: 'Finalized'
-      });
-    }
-
-    this.dataSource.data = reportsList;
+    this.api.getReports().subscribe({
+      next: (reports) => {
+        this.dataSource.data = reports;
+      },
+      error: (err) => console.error('Error fetching reports', err)
+    });
   }
 }
 
