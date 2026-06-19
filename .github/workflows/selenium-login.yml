@@ -31,7 +31,7 @@ jobs:
       - name: Install Frontend Dependencies
         working-directory: frontend_web
         run: |
-          npm ci || npm install
+          npm ci --legacy-peer-deps || npm install --legacy-peer-deps
           npx ng analytics disable
 
       - name: Setup Frontend Environment
@@ -128,5 +128,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: selenium-e2e-test-reports
-          path: E2E_Test_Report_MedVisionSort_*.xlsx
+          path: E2E_Test_Report_MedVisionSort_2026-06-11T18-56-04.xlsx
           if-no-files-found: ignore

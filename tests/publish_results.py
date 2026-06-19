@@ -8,8 +8,8 @@ def get_report_paths():
     script_dir = os.path.dirname(os.path.abspath(__file__))
     repo_root = os.path.abspath(os.path.join(script_dir, ".."))
     
-    e2e_filename = "E2E_Test_Report_MedVisionSort_Appium.xlsx"
-    sec_filename = os.path.join("Vulnerability Test Results", "Security_Vulnerability_Report_v5_Mobileapp.xlsx")
+    e2e_filename = "E2E_Test_Report_MedVisionSort_2026-06-11T18-56-04.xlsx"
+    sec_filename = os.path.join("Vulnerability Test Results", "Security_Vulnerability_Report_v5_website.xlsx")
     
     paths = {
         "e2e": [
@@ -43,7 +43,7 @@ def parse_e2e_report(filepath):
     ws_summary = wb['📊 Summary']
     rows = list(ws_summary.values)
     
-    title = rows[0][0].strip() if rows[0][0] else "MedVisionSort — Selenium E2E Test Report"
+    title = rows[0][0].strip() if rows[0][0] else "MedVisionSort — Website Frontend E2E Test Report"
     generated_info = rows[1][0].strip() if rows[1][0] else ""
     
     total_tests = rows[5][1]
@@ -139,15 +139,15 @@ def main():
     sec_title, sec_version, sec_audit, sec_sum_find, sec_details = parse_security_report(sec_path)
     
     markdown_output = []
-    markdown_output.append("# 🧪 MedVisionSort Automated Test & Security Verification Dashboard\n")
-    markdown_output.append("This dashboard displays the test results verified from the completed test execution reports.\n")
+    markdown_output.append("# 🧪 MedVisionSort Website — Automated Test & Security Verification Dashboard\n")
+    markdown_output.append("This dashboard displays the verified test results from the completed **website** E2E and security audit reports.\n")
     
     # Overview Callout
     markdown_output.append("> [!NOTE]")
-    markdown_output.append("> This automated dashboard summarizes the verified E2E Selenium tests and the Application Security posture for MedVisionSort. No active tests were run during this verification step. Pre-executed test reports and vulnerability audit data have been processed.\n")
+    markdown_output.append("> This automated dashboard summarises verified Selenium E2E tests and the application security posture for the **MedVisionSort Website**. No active tests were run during this verification step. Pre-executed test reports and vulnerability audit data have been parsed and published.\n")
 
     # E2E Test Suite Summary
-    markdown_output.append("## 🌿 E2E Test Suite Summary")
+    markdown_output.append("## 🌐 Website E2E Test Suite Summary")
     markdown_output.append(f"*{e2e_sum.get('generated')}*\n")
     markdown_output.append("| Metric | Value |")
     markdown_output.append("| :--- | :--- |")
@@ -168,7 +168,7 @@ def main():
     markdown_output.append("\n")
 
     # Security Verification Summary
-    markdown_output.append("## 🛡️ Application Security Audit Summary")
+    markdown_output.append("## 🛡️ Website Application Security Audit Summary")
     markdown_output.append(f"**Audit Report Title**: {sec_title}  \n**Version**: {sec_version}\n")
     
     markdown_output.append("### 📝 Audit Scope & Methodology")
@@ -195,7 +195,7 @@ def main():
     markdown_output.append("\n")
 
     markdown_output.append("> [!IMPORTANT]")
-    markdown_output.append("> **Security Posture Clearance:** No Critical, High, or Medium severity findings remain open. The application is cleared for submission.\n")
+    markdown_output.append("> **Security Posture Clearance:** No Critical, High, or Medium severity findings remain open. The website application is cleared for submission.\n")
 
     # E2E Details Expandable Section
     markdown_output.append("### 📋 E2E Test Cases Detail Breakdown")

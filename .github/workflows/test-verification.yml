@@ -1,4 +1,4 @@
-name: MedVisionSort Website — E2E & Security Test Verification
+name: MedVisionSort Website — E2E, Security & Load Test Verification
 
 on:
   push:
@@ -8,10 +8,49 @@ on:
   workflow_dispatch:
 
 jobs:
-  verify:
-    name: Verify Website Test Reports
+  publish-e2e-report:
+    name: Upload E2E Report
     runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
+      - name: Upload Website E2E Test Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: Website-E2E-Test-Report
+          path: E2E_Test_Report_MedVisionSort_2026-06-11T18-56-04.xlsx
+
+  publish-security-report:
+    name: Upload Security Report
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Upload Website Security Vulnerabilities Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: Website-Security-Vulnerabilities-Report
+          path: "Vulnerability Test Results/Security_Vulnerability_Report_v5_website.xlsx"
+
+  publish-load-report:
+    name: Upload Load Test Report
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Upload Website Load Test Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: Website-Load-Test-Report
+          path: Load_Test_Report_MedVisionSort_*.xlsx
+
+  generate-dashboard-summary:
+    name: Generate Dashboard Summary
+    runs-on: ubuntu-latest
+    needs: [publish-e2e-report, publish-security-report, publish-load-report]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -29,15 +68,3 @@ jobs:
       - name: Publish Website Test Results to Job Summary
         run: |
           python tests/publish_results_website.py
-
-      - name: Upload Website E2E Test Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: Website-E2E-Test-Report
-          path: E2E_Test_Report_MedVisionSort_2026-06-11T18-56-04.xlsx
-
-      - name: Upload Website Security Vulnerabilities Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: Website-Security-Vulnerabilities-Report
-          path: "Vulnerability Test Results/Security_Vulnerability_Report_v5_website.xlsx"

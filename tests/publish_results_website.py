@@ -1,15 +1,17 @@
 import os
 import openpyxl
 import sys
+import glob
 
 
 def get_report_paths():
-    """Locate the website E2E and security report files."""
+    """Locate the website E2E, security, and load test report files."""
     script_dir = os.path.dirname(os.path.abspath(__file__))
     repo_root = os.path.abspath(os.path.join(script_dir, ".."))
 
     e2e_filename = "E2E_Test_Report_MedVisionSort_2026-06-11T18-56-04.xlsx"
     sec_filename = os.path.join("Vulnerability Test Results", "Security_Vulnerability_Report_v5_website.xlsx")
+    load_pattern = "Load_Test_Report_MedVisionSort_*.xlsx"
 
     paths = {
         "e2e": [
@@ -22,13 +24,22 @@ def get_report_paths():
             os.path.join(".", sec_filename),
             sec_filename,
         ],
+        "load": [
+            os.path.join(repo_root, load_pattern),
+            os.path.join(".", load_pattern),
+        ],
     }
 
     resolved = {}
     for key, path_list in paths.items():
         found = None
         for p in path_list:
-            if os.path.exists(p):
+            if '*' in p:
+                matches = glob.glob(p)
+                if matches:
+                    found = matches[0]
+                    break
+            elif os.path.exists(p):
                 found = p
                 break
         if not found:
@@ -39,7 +50,7 @@ def get_report_paths():
             sys.exit(1)
         resolved[key] = found
 
-    return resolved["e2e"], resolved["sec"]
+    return resolved["e2e"], resolved["sec"], resolved["load"]
 
 
 def parse_e2e_report(filepath):
@@ -142,20 +153,40 @@ def parse_security_report(filepath):
     return title, version, audit_info, findings_summary, findings
 
 
+def parse_load_report(filepath):
+    wb = openpyxl.load_workbook(filepath, data_only=True)
+    ws_summary = wb["📊 Executive Summary"]
+
+    total_reqs = ws_summary["A5"].value
+    total_rps = ws_summary["C5"].value
+    avg_response = ws_summary["E5"].value
+    error_rate = ws_summary["G5"].value
+    overall_status = ws_summary["I5"].value
+
+    return {
+        "total_requests": total_reqs,
+        "total_rps": total_rps,
+        "avg_response": avg_response,
+        "error_rate": error_rate,
+        "overall_status": overall_status,
+    }
+
+
 def main():
     # Configure UTF-8 stdout to prevent encoding crashes on emoji output
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-    e2e_path, sec_path = get_report_paths()
+    e2e_path, sec_path, load_path = get_report_paths()
 
     e2e_sum, e2e_mods, e2e_details = parse_e2e_report(e2e_path)
     sec_title, sec_version, sec_audit, sec_sum_find, sec_details = parse_security_report(sec_path)
+    load_sum = parse_load_report(load_path)
 
     markdown_output = []
-    markdown_output.append("# 🧪 MedVisionSort Website — Automated Test & Security Verification Dashboard\n")
+    markdown_output.append("# 🧪 MedVisionSort Website — Automated Test, Load & Security Verification Dashboard\n")
     markdown_output.append(
-        "This dashboard displays the verified test results from the completed **website** E2E and security audit reports.\n"
+        "This dashboard displays the verified test results from the completed **website** E2E, load testing, and security audit reports.\n"
     )
 
     # Overview callout
@@ -178,6 +209,19 @@ def main():
     markdown_output.append(f"| **Not Run** | ⏭️ {e2e_sum.get('not_run')} |")
     markdown_output.append(f"| **Pass Rate** | **{e2e_sum.get('pass_rate')}** 🎯 |")
     markdown_output.append("\n")
+
+    # ── Load Testing Summary ────────────────────────────────────────────────
+    if load_sum:
+        markdown_output.append("## ⚡ Website Baseline Load Test Summary")
+        markdown_output.append("Baseline / Load Test Results simulating 100 Virtual Users over 60 seconds.\n")
+        markdown_output.append("| Metric | Value |")
+        markdown_output.append("| :--- | :--- |")
+        markdown_output.append(f"| **Total Requests** | {load_sum.get('total_requests')} |")
+        markdown_output.append(f"| **Requests Per Second** | {load_sum.get('total_rps')} |")
+        markdown_output.append(f"| **Average Response** | {load_sum.get('avg_response')} |")
+        markdown_output.append(f"| **Error Rate** | {load_sum.get('error_rate')} |")
+        markdown_output.append(f"| **Overall Status** | {load_sum.get('overall_status')} |")
+        markdown_output.append("\n")
 
     # ── E2E Module Breakdown ────────────────────────────────────────────────
     markdown_output.append("### 📦 E2E Module Breakdown")
