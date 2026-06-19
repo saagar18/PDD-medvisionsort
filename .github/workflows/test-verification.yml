@@ -55,6 +55,24 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Download E2E Report Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: Website-E2E-Test-Report
+          path: .
+
+      - name: Download Security Report Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: Website-Security-Vulnerabilities-Report
+          path: Vulnerability Test Results
+
+      - name: Download Load Test Report Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: Website-Load-Test-Report
+          path: .
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
