@@ -2,6 +2,7 @@ import os
 import openpyxl
 import sys
 import glob
+import datetime
 
 
 def get_report_paths():
@@ -189,17 +190,17 @@ def main():
         "This dashboard displays the verified test results from the completed **website** E2E, load testing, and security audit reports.\n"
     )
 
-    # Overview callout
-    markdown_output.append("> [!NOTE]")
-    markdown_output.append(
-        "> This automated dashboard summarises verified Selenium E2E tests and the application security posture"
-        " for the **MedVisionSort Website**. No active tests were run during this verification step."
-        " Pre-executed test reports and vulnerability audit data have been parsed and published.\n"
-    )
+    generated_text = e2e_sum.get('generated', '')
+    current_time = datetime.datetime.now().strftime("%d %B %Y %H:%M:%S")
+    if " | " in generated_text:
+        parts = generated_text.split(" | ", 1)
+        generated_text = f"Generated: {current_time} | {parts[1]}"
+    else:
+        generated_text = f"Generated: {current_time}"
 
     # ── E2E Test Suite Summary ──────────────────────────────────────────────
     markdown_output.append("## 🌐 Website E2E Test Suite Summary")
-    markdown_output.append(f"*{e2e_sum.get('generated')}*\n")
+    markdown_output.append(f"*{generated_text}*\n")
     markdown_output.append("| Metric | Value |")
     markdown_output.append("| :--- | :--- |")
     markdown_output.append(f"| **Test Suite** | {e2e_sum.get('title')} |")
@@ -276,12 +277,7 @@ def main():
     )
     markdown_output.append("\n")
 
-    markdown_output.append("> [!IMPORTANT]")
-    markdown_output.append(
-        "> **Security Posture Clearance:** No Critical, High, or Medium severity findings remain open."
-        " The website application is cleared for submission.\n"
-    )
-
+    # Clearance note removed per user request
     # ── E2E Details ─────────────────────────────────────────────────────────
     markdown_output.append("### 📋 E2E Test Cases Detail Breakdown")
     markdown_output.append(
